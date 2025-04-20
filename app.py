@@ -32,7 +32,7 @@ with st.sidebar:
     - Activity Levels: 1(Sedentary) → 5(Athlete)
     - Sleep Quality: 1(Poor) → 5(Excellent)
     """)
-    st.download_button("Download Clinical Protocol", "path/to/protocol.pdf")
+    
     st.divider()
     st.markdown("**Model Information**")
     st.caption(f"• Algorithm: {model.__class__.__name__}")
