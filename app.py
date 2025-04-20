@@ -49,8 +49,24 @@ with st.sidebar:
 # Main interface
 st.title('Alzheimer\'s Disease Risk Assessment Tool')
 
-st.info('This tool estimates dementia risk using established clinical biomarkers and lifestyle factors.')
+st.info("""
+**🧠 Alzheimer's Disease Risk Assessment Tool**  
 
+This clinical decision support system estimates dementia risk using:  
+✅ Validated biomarkers (APOE-ε4 status, age)  
+✅ Modifiable lifestyle factors (activity, sleep, alcohol)  
+✅ Family history  
+
+**How to Use:**  
+1. Enter patient data in all sections  
+2. Click "Calculate Risk" for:  
+   - Binary risk classification (Low/High)  
+   - Probability percentage  
+   - SHAP analysis of contributing factors  
+3. Review evidence-based mitigation strategies  
+
+*Note: Results should inform—not replace—clinical judgment.*  
+""", icon="ℹ️")
 # ⭐️ NEW METRICS SECTION ⭐️
 with st.expander("🔍 Model Performance Overview", expanded=True):
     col_metrics1, col_metrics2, col_metrics3 = st.columns(3)
