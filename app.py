@@ -58,7 +58,7 @@ This clinical decision support system estimates dementia risk using:
 ✅ Family history  
 
 **How to Use:**  
-1. Enter patient data in all sections  
+1. Enter data in all sections  
 2. Click "Calculate Risk" for:  
    - Binary risk classification (Low/High)  
    - Probability percentage  
