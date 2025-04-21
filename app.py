@@ -7,15 +7,15 @@ import json
 import numpy as np
 
 
-# Load artifacts
+
 model = joblib.load('models/alzheimer_model.pkl')
-evaluation_report = joblib.load('reports/evaluation_report.pkl')  # Add this line
+evaluation_report = joblib.load('reports/evaluation_report.pkl') 
 
 feature_mappings = joblib.load('models/feature_mappings.pkl')
 selected_features = joblib.load('models/selected_features.pkl')
 explainer = shap.TreeExplainer(model)
 
-# App configuration
+
 st.set_page_config(
     page_title="Alzheimer's Risk Assessment",
     
@@ -23,7 +23,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Sidebar with user guidance
+
 with st.sidebar:
     st.header("Clinical Guidance")
     st.markdown("""
@@ -46,7 +46,7 @@ with st.sidebar:
     st.caption(f"• Features: {len(selected_features)} biomarkers")
 
 
-# Main interface
+# Main
 st.title('Alzheimer\'s Disease Risk Assessment Tool')
 
 st.info("""
@@ -67,7 +67,7 @@ This clinical decision support system estimates dementia risk using:
 
 *Note: Results should inform—not replace—clinical judgment.*  
 """, icon="ℹ️")
-# ⭐️ NEW METRICS SECTION ⭐️
+
 with st.expander("🔍 Model Performance Overview", expanded=True):
     col_metrics1, col_metrics2, col_metrics3 = st.columns(3)
     
@@ -86,7 +86,7 @@ with st.expander("🔍 Model Performance Overview", expanded=True):
                 f"{gap*100:.1f}%", 
                 delta="Good" if gap < 0.05 else "Monitor")
 
-# Input section with enhanced UX
+
 with st.form("patient_inputs"):
     col1, col2, col3 = st.columns([1,1,1])
     
@@ -95,7 +95,7 @@ with st.form("patient_inputs"):
     inputs = {
         'Age': st.slider('Age', 50, 100, 65,
                        help="Patient age in years"),
-        'Gender': st.radio(  # Add this input
+        'Gender': st.radio(  
             'Gender',
             options=feature_mappings['Gender'].keys(),
             horizontal=True,
@@ -140,13 +140,13 @@ with st.form("patient_inputs"):
         })
     
     if st.form_submit_button("Calculate Risk"):
-        # Processing logic
+       
         processed_data = {
-        # Numerical features (direct assignment)
+        
         'Age': inputs['Age'],
         'Alcohol Consumption': feature_mappings['Alcohol Consumption'][inputs['Alcohol Consumption']],
         
-        # Categorical features (mapped values)
+        # Categorical features
         'Gender': feature_mappings['Gender'][inputs['Gender']],
         'Physical Activity Level': feature_mappings['Physical Activity Level'][inputs['Physical Activity Level']],
         'Sleep Quality': feature_mappings['Sleep Quality'][inputs['Sleep Quality']],
@@ -154,12 +154,12 @@ with st.form("patient_inputs"):
         'Genetic Risk Factor (APOE-ε4 allele)': feature_mappings['Genetic Risk Factor (APOE-ε4 allele)'][inputs['Genetic Risk Factor (APOE-ε4 allele)']]
     }
 
-        # Calculate interaction features EXACTLY as in train.py
+        # Calculate interaction features 
         processed_data['Age_Alcohol'] = processed_data['Age'] * processed_data['Alcohol Consumption']
         processed_data['Physical_Sleep'] = processed_data['Physical Activity Level'] * processed_data['Sleep Quality']
         processed_data['Stress_Depression'] = 0  # Placeholder since stress/depression not in UI
 
-        # Create DataFrame with CORRECT feature order matching training
+        # Create DataFrame 
         input_df = pd.DataFrame([processed_data])[selected_features].astype(float)
         
         # Generate predictions
@@ -167,7 +167,7 @@ with st.form("patient_inputs"):
         proba = model.predict_proba(input_df)[0][1]  # Probability of high risk
         shap_values = explainer.shap_values(input_df)
         
-        # Results visualization
+        # Results 
         risk_color = "#ff4b4b" if prediction == 1 else "#2ecc71"
         
         with st.container():
@@ -184,20 +184,20 @@ with st.form("patient_inputs"):
                 
             with col_res2:
                 with st.spinner('Analyzing feature impacts...'):
-                    # Generate SHAP values
+                    
                     shap_values = explainer(input_df)
                     
-                    # Create waterfall plot
+                    
                     fig, ax = plt.subplots()
                     shap.plots.waterfall(shap_values[0], max_display=8, show=False)
                     plt.tight_layout()
                     
-                    # Display plot
+                    
                     st.pyplot(fig)
                     st.caption("How each feature contributes to the risk prediction")
 
         
-        # Lifestyle recommendations
+        #  recommendations
         st.subheader("Risk Mitigation Strategies")
         if prediction == 1:
             st.markdown("""
@@ -212,7 +212,7 @@ with st.form("patient_inputs"):
             - **Monitor genetic risk factors**
             """)
 
-# Accessibility features
+
 st.markdown("""
 <style>
 /* High contrast mode */

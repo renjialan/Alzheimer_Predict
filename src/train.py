@@ -24,7 +24,7 @@ FEATURE_MAPPINGS = {
 
 def preprocess_data(df):
     """Preprocess Alzheimer's dataset"""
-    # Apply mappings
+    
     for col, mapping in FEATURE_MAPPINGS.items():
         df[col] = df[col].map(mapping)
         
@@ -59,7 +59,7 @@ def train_and_save_model():
         X, y, test_size=0.2, random_state=42
     )
     
-    # Train model
+    # Train
     model_params = {
         'n_estimators': 100,
         'learning_rate': 0.1,
